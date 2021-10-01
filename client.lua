@@ -1,5 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+local isFueling = false
+
 exports['qb-target']:AddVehicle({
     options = {
       { 
@@ -8,12 +10,15 @@ exports['qb-target']:AddVehicle({
         label = 'Refuel Car', 
         icon = 'fas fa-gas-pump',
         item = 'weapon_petrolcan',
-		canInteract = function(entity) 
+	canInteract = function(entity)
+		if isFueling == false then
 			local curGasCanDurability = GetCurrentGasCanDurability()
-            if curGasCanDurability == nil then return false end
-            if curGasCanDurability > 0 then return true end
-            return false
+            		if curGasCanDurability == nil then return false end
+            		if curGasCanDurability > 0 then return true end
+            		return false
 		end
+		return false
+	end
       }
     },
     distance = 2.5,
@@ -122,7 +127,7 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
             end
         end
 
-        local isFueling = true
+        isFueling = true
         local currentCost = 0
         local currentFuel = GetVehicleFuelLevel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
@@ -229,7 +234,7 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
             end
         end
 
-        local isFueling = true
+        isFueling = true
         local currentFuel = GetVehicleFuelLevel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
