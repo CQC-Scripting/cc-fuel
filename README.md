@@ -3,8 +3,8 @@
 ![Banner](https://user-images.githubusercontent.com/89382232/135760706-97bc48d6-7c40-4b70-a0b7-779834173c85.png)
 
 # CC-FUEL
+
 CC-Fuel is a Modified version of LegacyFuel for QB-Core using QB-Target for Interactions.
-<br>
 <br>
 Full credit goes to the author of LegacyFuel, I just reworked it to fit better with qb-target.
 
@@ -53,5 +53,5 @@ Original Repo - https://github.com/qbcore-framework/LegacyFuel
 **DEPENDENCIES**
 -----
 
-QBCore - https://github.com/qbcore-framework
-QB-Target - https://github.com/BerkieBb/qb-target
+- QBCore - https://github.com/qbcore-framework
+- QB-Target - https://github.com/BerkieBb/qb-target
