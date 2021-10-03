@@ -412,6 +412,7 @@ Citizen.CreateThread(function()
 
     local fuelSynced = false
 
+    local inBlacklisted = false
 	while true do
 		Citizen.Wait(1000)
 
