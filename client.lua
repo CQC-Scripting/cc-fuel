@@ -64,6 +64,96 @@ exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
     distance = 3.0
 })
 
+--Fuel siphon event
+RegisterNetEvent("cc-fuel:client:siphonfuel")
+AddEventHandler("cc-fuel:client:siphonfuel",function() 
+    local petrolCanDurability = GetCurrentGasCanDurability()
+
+    local PlayerPed = PlayerPedId()
+    local Vehicle = QBCore.Functions.GetClosestVehicle()
+
+    local PlayerCoords = GetEntityCoords(PlayerPed)
+    local vehicleCoords = GetEntityCoords(Vehicle)
+
+    local distanceToVehicle =  #(PlayerCoords - vehicleCoords)
+    
+    local petrolCanDurability = GetCurrentGasCanDurability()
+
+    
+    if distanceToVehicle > 2.5 then
+        QBCore.Functions.Notify("You are too far away from the vehicle","error")
+        return
+    end
+
+    --Check petrol can is able to take fuel
+    if petrolCanDurability == nil then
+        QBCore.Functions.Notify("You need a petrol can in your hands","error")
+        return
+    elseif petrolCanDurability == 100 then
+        QBCore.Functions.Notify("You petrol can is full","error")
+        return
+    end
+    local currentFuel = GetVehicleFuelLevel(Vehicle)
+    --Check car is able to have fuel taken
+    if currentFuel > 0 then
+        --Start taking the fuel
+        TaskTurnPedToFaceEntity(PlayerPed, Vehicle, 1000)
+	    Citizen.Wait(1000)
+	
+	    LoadAnimDict("timetable@gardener@filling_can")
+	    TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+
+        isFueling = true
+
+        Citizen.CreateThread(function() 
+            local fuelToTake = Config.SiphonRate
+            while isFueling do
+                Citizen.Wait(500)
+
+		        currentFuel = (currentFuel - fuelToTake)
+                petrolCanDurability = (petrolCanDurability + fuelToTake )
+
+                if currentFuel <= 0 then
+                    currentFuel = 0
+                    isFueling = false
+                end
+
+                SetFuel(Vehicle, currentFuel)
+                
+                if petrolCanDurability >= 100 then
+                    isFueling = false
+                end
+            end
+
+            TriggerEvent("weapons:client:SetWeaponQuality",petrolCanDurability)
+        end)
+
+        while isFueling do
+            for _, controlIndex in pairs(Config.DisableKeys) do
+                DisableControlAction(0, controlIndex)
+            end
+
+			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Config.Strings.CancelSiphoningFuel .. " | Vehicle: " .. Round(currentFuel, 1) .. "%")
+
+            if not IsEntityPlayingAnim(PlayerPed, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3) then
+                TaskPlayAnim(PlayerPed, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+            end
+
+            if IsControlJustReleased(0, 38) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) then
+                isFueling = false
+            end
+
+            Citizen.Wait(0)
+        end
+
+        ClearPedTasks(PlayerPed)
+        QBCore.Functions.Notify("You siphoned fuel","success")
+    else
+        QBCore.Functions.Notify("The tank is empty","error")
+    end
+
+
+end)
 
 --Action events
 RegisterNetEvent("cc-fuel:client:refillpetrolcan")
