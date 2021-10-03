@@ -34,7 +34,7 @@ exports['qb-target']:AddVehicle({
             if curGasCanDurability == nil then return false end
             if curGasCanDurability >= 100 then return false end
             
-            return true
+            return Config.AllowFuelSiphoning
         end
       }
     },
