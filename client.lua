@@ -11,13 +11,14 @@ exports['qb-target']:AddVehicle({
         icon = 'fas fa-gas-pump',
         item = 'weapon_petrolcan',
 	    canInteract = function(entity)
+            if GetVehicleEngineHealth(entity) <= 0 then return false end
 		    if isFueling == false then
-			local curGasCanDurability = GetCurrentGasCanDurability()
-            		if curGasCanDurability == nil then return false end
-            		if curGasCanDurability > 0 then return true end
-            		return false
-		end
-		return false
+			    local curGasCanDurability = GetCurrentGasCanDurability()
+                if curGasCanDurability == nil then return false end
+            	if curGasCanDurability > 0 then return true end
+            	return false
+		    end
+		    return false
 	    end
       },
       {
@@ -27,6 +28,7 @@ exports['qb-target']:AddVehicle({
           icon = 'fas fa-gas-pump',
           item = 'fuelsiphon',
           canInteract = function(entity)
+            if GetVehicleEngineHealth(entity) <= 0 then return false end
             if isFueling then return false end
             local curGasCanDurability = GetCurrentGasCanDurability()
             if curGasCanDurability == nil then return false end
@@ -58,7 +60,13 @@ exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
 			type = "client",
 			event = "cc-fuel:client:refillpetrolcan",
 			icon =  "fas fa-gas-pump",
-			label = "Refuel Petrol Can"
+			label = "Refuel Petrol Can",
+            canInteract = function(entity)
+                local gasCanDurability = GetCurrentGasCanDurability()
+                if gasCanDurability == nil then return false end
+                if gasCanDurability >= 100 then return false end
+                return true
+            end
 		}
     },
     distance = 3.0
