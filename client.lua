@@ -10,15 +10,15 @@ exports['qb-target']:AddVehicle({
         label = 'Refuel Car', 
         icon = 'fas fa-gas-pump',
         item = 'weapon_petrolcan',
-	canInteract = function(entity)
-		if isFueling == false then
+	    canInteract = function(entity)
+		    if isFueling == false then
 			local curGasCanDurability = GetCurrentGasCanDurability()
             		if curGasCanDurability == nil then return false end
             		if curGasCanDurability > 0 then return true end
             		return false
 		end
 		return false
-	end
+	    end
       },
       {
           type="client",
@@ -267,7 +267,7 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
                 DisableControlAction(0, controlIndex)
             end
 
-            local extraString = "\n" .. Config.Strings.TotalCost .. ": ~g~$" .. Round(currentCost, 1)
+            local extraString = "\n" .. "Cost " .. ": ~g~$" .. Round(currentCost, 1)
 
 			DrawText3Ds(pumpCoords.x, pumpCoords.y, pumpCoords.z + 1.2, Config.Strings.CancelFuelingPump .. extraString)
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Round(currentFuel, 1) .. "%")
@@ -277,7 +277,6 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
             end
 
             if IsControlJustReleased(0, 38) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) then
-                print("Stopped Fueling")
                 isFueling = false
             end
 
@@ -381,7 +380,6 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
             end
 
             if IsControlJustReleased(0, 38) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) then
-                print("Stopped Fueling")
                 isFueling = false
             end
 
