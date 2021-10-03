@@ -1,5 +1,3 @@
-<h1>🚧 STILL A WIP 🚧</h1>
-
 ![Banner](https://user-images.githubusercontent.com/89382232/135760706-97bc48d6-7c40-4b70-a0b7-779834173c85.png)
 
 # CC-FUEL
