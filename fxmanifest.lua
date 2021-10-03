@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Custard'
 description 'Fueling system utilising qb-target'
-version '0'
+version '1.0'
 
 shared_scripts { 
 	'config.lua'
