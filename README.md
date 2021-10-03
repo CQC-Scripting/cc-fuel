@@ -25,7 +25,7 @@ Full credit goes to the author of LegacyFuel, I just reworked it to fit better w
 - QB-Target Based Script
 - Can Refill At All Gas Stations
 - Refuel From Petrol Cans (Petrol Can Item Required On Person)
-- Syphon Fuel From Cars (Fuel Syphon Item Required On Person)
+- Siphon Fuel From Cars (Fuel Siphon Item Required On Person)
 - Added chance for car blowing Up if Engine left on while refueling
 
 
