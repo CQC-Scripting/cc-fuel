@@ -246,21 +246,20 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
         Citizen.CreateThread(function() 
+            local fuelToAdd = Config.PetrolPumpRefuelRate
             while isFueling do
                 Citizen.Wait(500)
-
-		        local oldFuel = currentFuel
-		        local fuelToAdd = 0.5
+		        
 		        local extraCost = fuelToAdd / 1.5 * Config.CostMultiplier
                 
-                currentFuel = oldFuel + fuelToAdd
+                currentFuel = currentFuel + fuelToAdd
 
                 if currentFuel > 100.0 then
                     currentFuel = 100.0
                     isFueling = false
                 end
 
-                currentCost = currentCost + 0.75
+                currentCost = currentCost + extraCost
 
                 if currentCash >= currentCost then
                     SetFuel(Vehicle, currentFuel)
@@ -350,15 +349,12 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
         local currentFuel = GetVehicleFuelLevel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
-        Citizen.CreateThread(function() 
+        Citizen.CreateThread(function()
+            local fuelToAdd = Config.PetrolCanRefuelRate 
             while isFueling do
                 Citizen.Wait(500)
-
-		        local oldFuel = currentFuel
-		        local fuelToAdd = 0.5
-		        local extraCost = fuelToAdd / 1.5 * Config.CostMultiplier
-                
-                currentFuel = oldFuel + fuelToAdd
+		        
+                currentFuel = currentFuel + fuelToAdd
                 petrolCanDurability = (petrolCanDurability - fuelToAdd)
 
                 if currentFuel > 100.0 then
@@ -391,7 +387,7 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
                 isFueling = false
             end
 
-            Citizen.Wait(0)
+            Citizen.Wait(10)
         end
 
         ClearPedTasks(PlayerPed)
