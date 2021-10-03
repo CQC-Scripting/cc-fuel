@@ -18,22 +18,22 @@ Write down everything you did as clearly as possible. Make sure each step is sel
 3. Use this item '....' (item's name from shared.lua if applicable)
 4. See error
 
-**Expected behavior**
-A straightforward and simple interpretation of what you anticipated to happen.
+**Expected behavior:**
+- A straightforward and simple interpretation of what you anticipated to happen.
 
-**Result**
-A straightforward and simple interpretation of what actually happened.
+**Result:**
+- A straightforward and simple interpretation of what actually happened.
 
-**Screenshots**
-If applicable, add screenshots to the bug report to help explain your problem. [e.g. F8 Console Errors / Server Errors]
+**Screenshots:**
+- If applicable, add screenshots to the bug report to help explain your problem. [e.g. F8 Console Errors / Server Errors]
 
 **Questions (please complete the following information):**
  - When you last updated: [e.g. last week]
  - Are you using another resource similar to this one? [e.g. yes/no] if so, which ones? [e.g. LegacyFuel, bt-target]
  - Have you renamed the script? [e.g. yes/no]
 
-**Additional context**
-Add any other context about the problem here.
+**Additional context:**
+- Add any other context about the problem here.
 
 **CREDIT**
 - QBFramework For The Bug Report Template
