@@ -36,6 +36,7 @@ Config.Strings = {
 	TotalCost = "Cost",
 	PurchaseJerryCan = "Press ~g~E ~w~to grab a jerry can",
 	RefillJerryCan = "Press ~g~E ~w~ to refill the jerry can",
+	CancelSiphoningFuel = "Press ~g~E ~w~ to cancel siphoning fuel"
 }
 
 Config.PumpModels = {
@@ -139,8 +140,21 @@ Config.GasStations = {
 	vector3(1784.324, 3330.55, 41.253)
 }
 
+--Fueling rates, higher numbers = faster fueling
+
+--The rate at which fuel can be siphoned from a tank
+Config.SiphonRate = 0.25
+--The rate at which a petrol can will refuel a car
+Config.PetrolCanRefuelRate = 0.50
+--The rate at which a pump will refuel a car
+Config.PetrolPumpRefuelRate = 0.75
+
 --Controls whether or not the vehicle will blow up if a refuel is attempted with engine on
 Config.VehicleEngineOnBlowUp = true
-
 --Percentage chance that the vehicle will blow up if a refuel is attempted with engine on
 Config.VehicleBlowUpChance = 25
+
+
+--Allows people to siphon fuel from other vehicles into their petrol cans
+Config.AllowFuelSiphoning = true
+
