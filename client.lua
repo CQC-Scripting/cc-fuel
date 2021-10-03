@@ -19,6 +19,21 @@ exports['qb-target']:AddVehicle({
 		end
 		return false
 	end
+      },
+      {
+          type="client",
+          event="cc-fuel:client:siphonfuel",
+          label = "Siphon Fuel",
+          icon = 'fas fa-gas-pump',
+          item = 'fuelsiphon',
+          canInteract = function(entity)
+            if isFueling then return false end
+            local curGasCanDurability = GetCurrentGasCanDurability()
+            if curGasCanDurability == nil then return false end
+            if curGasCanDurability >= 100 then return false end
+            
+            return true
+        end
       }
     },
     distance = 2.5,
