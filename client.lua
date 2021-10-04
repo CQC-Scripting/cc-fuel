@@ -7,7 +7,7 @@ QBCore = exports['qb-core']:GetCoreObject()
 --	while QBCore == nil do
 --      TriggerEvent("QBCore:GetObject", function(obj)QBCore = obj end)
 --	end
---end
+--end)
 
 local isFueling = false
 
