@@ -25,5 +25,7 @@ dependencies {
 
 exports {
 	'GetFuel',
-	'SetFuel'
+	'SetFuel',
+	'IsSiphonFuelAllowed',
+	'IsPetrolCanRefuelAllowed',
 }
