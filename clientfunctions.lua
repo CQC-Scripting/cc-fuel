@@ -38,7 +38,7 @@ function CanFuelVehicle(Vehicle)
 end
 
 function GetFuel(vehicle)
-	if vehicle == 0 or vehicle == nil then return end
+	if vehicle == 0 or vehicle == nil then return 0 end
 	return GetVehicleFuelLevel(vehicle)
 end
 
