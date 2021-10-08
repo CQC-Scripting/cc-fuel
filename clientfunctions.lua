@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 
 --Gets the current Weapon data when a player swaps weapon
 local CurrentWeaponData = nil
@@ -43,6 +42,8 @@ function GetFuel(vehicle)
 end
 
 function SetFuel(vehicle, fuel)
+	if vehicle == 0 or vehicle == nil then return end
+	
 	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
 		SetVehicleFuelLevel(vehicle, fuel + 0.0)
 	end

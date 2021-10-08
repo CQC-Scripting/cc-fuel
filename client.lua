@@ -1,4 +1,13 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+QBCore = nil
+--New QBCore way of getting the Object comment out if your using old QB
+QBCore = exports['qb-core']:GetCoreObject()
+
+--Old way kept for old QBCore users uncomment if you use old QB
+--Citizen.CreateThread(function()
+--	while QBCore == nil do
+--      TriggerEvent("QBCore:GetObject", function(obj)QBCore = obj end)
+--	end
+--end)
 
 local isFueling = false
 

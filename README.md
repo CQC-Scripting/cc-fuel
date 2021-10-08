@@ -31,11 +31,9 @@ Full credit goes to the author of LegacyFuel, I just reworked it to fit better w
 
 <h2>NOTE</h2>
 
-Any scripts that use the LegacyFuel export should be changed to use the cc-fuel export instead.
+**Any scripts that use the LegacyFuel export should be changed to use the cc-fuel export instead.**
 <br>
-<br>
-exports['LegacyFuel']:GetFuel(vehicle) --> exports['cc-fuel']:GetFuel(vehicle)
-<br>
+- exports['LegacyFuel'] --> exports['cc-fuel']
 <br>
 To get the HUD fuel indicator working again replace the GetFuel export in qb-hud
 
