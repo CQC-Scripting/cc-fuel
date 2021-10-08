@@ -9,7 +9,7 @@ QBCore = exports['qb-core']:GetCoreObject()
 --	end
 --end)
 
-local isFueling = false
+isFueling = false
 
 exports['qb-target']:AddVehicle({
     options = {
