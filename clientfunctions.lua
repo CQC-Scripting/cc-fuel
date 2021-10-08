@@ -9,6 +9,31 @@ AddEventHandler('weapons:client:SetCurrentWeapon', function(data, bool)
     end
 end)
 
+--Checks if the supplied vehicle can have fuel siphoned from it
+function IsSiphonFuelAllowed(vehicle)
+	if GetVehicleEngineHealth(entity) <= 0 then return false end
+    if isFueling then return false end
+            
+	local curGasCanDurability = GetCurrentGasCanDurability()
+    
+	if curGasCanDurability == nil then return false end
+    if curGasCanDurability >= 100 then return false end
+            
+    return Config.AllowFuelSiphoning
+end
+
+--Checks if the vehicle passed in can be refuelled by petrol can
+function IsPetrolCanRefuelAllowed(vehicle)
+	if GetVehicleEngineHealth(entity) <= 0 then return false end
+	if isFueling then return false end
+
+	local curGasCanDurability = GetCurrentGasCanDurability()
+    if curGasCanDurability == nil then return false end
+    if curGasCanDurability <= 0 then return false end
+
+	return Config.AllowPetrolCanRefuelCar
+end
+
 --If the player has a gas can equiped it gets the durability of the can
 --nil if no can is equiped
 function GetCurrentGasCanDurability()
@@ -95,6 +120,10 @@ function CreateBlip(coords)
 	EndTextCommandSetBlipName(blip)
 
 	return blip
+end
+
+function GetGasPumpModels()
+	return Config.GasPumpModels
 end
 
 function FindNearestFuelPump()
