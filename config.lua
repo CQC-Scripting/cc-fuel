@@ -94,3 +94,6 @@ Config.VehicleBlowUpChance = 25
 --Allows people to siphon fuel from other vehicles into their petrol cans
 Config.AllowFuelSiphoning = true
 
+--Allows people to refuel their cars with a petrol can that has fuel in it
+Config.AllowPetrolCanRefuelCar = true
+
