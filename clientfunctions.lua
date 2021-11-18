@@ -1,14 +1,3 @@
-
---Gets the current Weapon data when a player swaps weapon
-local CurrentWeaponData = nil
-AddEventHandler('weapons:client:SetCurrentWeapon', function(data, bool)
-    if data ~= false then
-        CurrentWeaponData = data
-    else
-        CurrentWeaponData = {}
-    end
-end)
-
 function CanPumpRefuelPetrolCan()
 	local petrolCan = GetCurrentGasCanDurability()
 	if petrolCan == nil then return false end
