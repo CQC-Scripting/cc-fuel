@@ -68,7 +68,7 @@ CreateThread(function()
         },
         distance = 3.0
     })
-    if config.Blips then
+    if Config.Blips then
         for k, v in pairs(Config.FuelStations) do
             FuelStationBlip = AddBlipForCoord(v.x, v.y, v.z)
             SetBlipSprite(FuelStationBlip, Config.BlipSpirte)
