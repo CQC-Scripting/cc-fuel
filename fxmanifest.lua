@@ -19,8 +19,7 @@ server_scripts {
 }
 
 dependencies {
-	'qb-core',
-	'qb-target'
+	'qb-core'
 }
 
 exports {
@@ -28,4 +27,5 @@ exports {
 	'SetFuel',
 	'IsSiphonFuelAllowed',
 	'IsPetrolCanRefuelAllowed',
+	'CanPumpRefuelPetrolCan',
 }
