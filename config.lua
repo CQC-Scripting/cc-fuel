@@ -11,9 +11,9 @@ Config.CostMultiplier = 1.5
 
 -- Configure the strings as you wish here.
 Config.Strings = {
-	CancelFuelingPump = "Press ~g~E ~w~to cancel the fueling",
-	CancelFuelingJerryCan = "Press ~g~E ~w~to cancel the fueling",
-	CancelSiphoningFuel = "Press ~g~E ~w~ to cancel siphoning fuel"
+	CancelFuelingPump = "Press ~b~E ~w~to cancel the fueling",
+	CancelFuelingJerryCan = "Press ~b~E ~w~to cancel the fueling",
+	CancelSiphoningFuel = "Press ~b~E ~w~ to cancel siphoning fuel"
 }
 
 -- Blacklist certain vehicles. Use names or hashes. https://wiki.gtanet.work/index.php?title=Vehicle_Models
