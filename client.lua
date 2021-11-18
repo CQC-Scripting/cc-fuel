@@ -281,7 +281,7 @@ RegisterNetEvent("cc-fuel:client:pumprefuel", function(pump)
                 DisableControlAction(0, controlIndex)
             end
 
-            local extraString = "\n" .. "Cost " .. ": ~g~$" .. Round(currentCost, 1)
+            local extraString = "\n" .. "Cost " .. ": ~b~$" .. Round(currentCost, 1)
 
 			DrawText3Ds(pumpCoords.x, pumpCoords.y, pumpCoords.z + 1.2, Config.Strings.CancelFuelingPump .. extraString)
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Round(currentFuel, 1) .. "%")
