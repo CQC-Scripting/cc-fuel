@@ -1,82 +1,87 @@
 --New QBCore way of getting the Object comment out if your using old QB
 QBCore = exports['qb-core']:GetCoreObject()
 
---Old way kept for old QBCore users uncomment if you use old QB
--- QBCore = nil
---CreateThread(function()
---	while QBCore == nil do
---      TriggerEvent("QBCore:GetObject", function(obj)QBCore = obj end)
---	end
---end)
-
 isFueling = false
-
-exports['qb-target']:AddVehicle({
-    options = {
-      { 
-        type = "client",
-        event = 'cc-fuel:client:petrolcanrefuel',
-        label = 'Refuel Car', 
-        icon = 'fas fa-gas-pump',
-        item = 'weapon_petrolcan',
-	    canInteract = function(entity)
-            if GetVehicleEngineHealth(entity) <= 0 then return false end
-		    if isFueling == false then
-			    local curGasCanDurability = GetCurrentGasCanDurability()
-                if curGasCanDurability == nil then return false end
-            	if curGasCanDurability > 0 then return true end
-            	return false
-		    end
-		    return false
-	    end
-      },
-      {
-          type="client",
-          event="cc-fuel:client:siphonfuel",
-          label = "Siphon Fuel",
-          icon = 'fas fa-gas-pump',
-          item = 'fuelsiphon',
-          canInteract = function(entity)
-            if GetVehicleEngineHealth(entity) <= 0 then return false end
-            if isFueling then return false end
-            local curGasCanDurability = GetCurrentGasCanDurability()
-            if curGasCanDurability == nil then return false end
-            if curGasCanDurability >= 100 then return false end
-            
-            return Config.AllowFuelSiphoning
-        end
-      }
-    },
-    distance = 2.5,
-})
-
-exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
-    options = {
-        {
-            icon = "fas fa-gas-pump",
-            label = "Get Fuel",
-            action = function(entity)
-                TriggerEvent("cc-fuel:client:pumprefuel", entity)
+CreateThread(function()
+    exports['qb-target']:AddGlobalVehicle({
+        options = {
+        { 
+            type = "client",
+            event = 'cc-fuel:client:petrolcanrefuel',
+            label = 'Refuel Car', 
+            icon = 'fas fa-gas-pump',
+            item = 'weapon_petrolcan',
+            canInteract = function(entity)
+                if GetVehicleEngineHealth(entity) <= 0 then return false end
+                if isFueling == false then
+                    local curGasCanDurability = GetCurrentGasCanDurability()
+                    if curGasCanDurability == nil then return false end
+                    if curGasCanDurability > 0 then return true end
+                    return false
+                end
+                return false
             end
         },
-		{
-			type = "client",
-			event = "cc-fuel:client:buypetrolcan",
-			icon =  "fas fa-gas-pump",
-			label = "Buy Petrol Can"
-		},
-		{
-			type = "client",
-			event = "cc-fuel:client:refillpetrolcan",
-			icon =  "fas fa-gas-pump",
-			label = "Refuel Petrol Can",
+        {
+            type="client",
+            event="cc-fuel:client:siphonfuel",
+            label = "Siphon Fuel",
+            icon = 'fas fa-gas-pump',
+            item = 'fuelsiphon',
             canInteract = function(entity)
-                return CanPumpRefuelPetrolCan()
+                if GetVehicleEngineHealth(entity) <= 0 then return false end
+                if isFueling then return false end
+                local curGasCanDurability = GetCurrentGasCanDurability()
+                if curGasCanDurability == nil then return false end
+                if curGasCanDurability >= 100 then return false end
+                
+                return Config.AllowFuelSiphoning
             end
-		}
-    },
-    distance = 3.0
-})
+        }
+        },
+        distance = 2.5,
+    })
+    exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
+        options = {
+            {
+                icon = "fas fa-gas-pump",
+                label = "Get Fuel",
+                action = function(entity)
+                    TriggerEvent("cc-fuel:client:pumprefuel", entity)
+                end
+            },
+            {
+                type = "client",
+                event = "cc-fuel:client:buypetrolcan",
+                icon =  "fas fa-gas-pump",
+                label = "Buy Petrol Can"
+            },
+            {
+                type = "client",
+                event = "cc-fuel:client:refillpetrolcan",
+                icon =  "fas fa-gas-pump",
+                label = "Refuel Petrol Can",
+                canInteract = function(entity)
+                    return CanPumpRefuelPetrolCan()
+                end
+            }
+        },
+        distance = 3.0
+    })
+    if config.Blips then
+        for k, v in pairs(Config.FuelStations) do
+            FuelStationBlip = AddBlipForCoord(v.x, v.y, v.z)
+            SetBlipSprite(FuelStationBlip, Config.BlipSpirte)
+            SetBlipDisplay(FuelStationBlip, 2)
+            SetBlipScale(FuelStationBlip, Config.BlipSize)
+            SetBlipAsShortRange(FuelStationBlip, true)
+            SetBlipColour(FuelStationBlip, Config.BlipColor)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentSubstringPlayerName(Config.BlipLabel)
+            EndTextCommandSetBlipName(FuelStationBlip)
+        end
+    end
+end)
 
 --Fuel siphon event
 RegisterNetEvent("cc-fuel:client:siphonfuel",function() 
@@ -450,4 +455,3 @@ CreateThread(function()
 		end
 	end
 end)
-
