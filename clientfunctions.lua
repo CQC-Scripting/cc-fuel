@@ -44,16 +44,21 @@ end
 --If the player has a gas can equiped it gets the durability of the can
 --nil if no can is equiped
 function GetCurrentGasCanDurability()
-    local Player = QBCore.Functions.GetPlayerData()
-    if CurrentWeaponData then
-	    if CurrentWeaponData.name == "weapon_petrolcan" then
-            return Player.items[CurrentWeaponData.slot].info.quality 
-        else
-            return nil
-        end
-    else
-        return nil
-    end
+	local ammo = GetAmmoInPedWeapon(PlayerPedId(), `weapon_petrolcan`)
+	local weapon, hash = GetCurrentPedWeapon(PlayerPedId())
+	if weapon then
+		if hash == `weapon_petrolcan` then
+			if ammo > 100 then 
+				ammo = 100
+				SetPedAmmo(PlayerPedId(), `weapon_petrolcan`, ammo)
+			end
+			return ammo
+		else
+			return nil
+		end
+	else
+		return nil
+	end
 end
 
 --Returns true if the vehicle passed in is able to be fueled
