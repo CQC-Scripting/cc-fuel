@@ -1,9 +1,9 @@
-QBCore = nil
 --New QBCore way of getting the Object comment out if your using old QB
 QBCore = exports['qb-core']:GetCoreObject()
 
 --Old way kept for old QBCore users uncomment if you use old QB
---Citizen.CreateThread(function()
+-- QBCore = nil
+--CreateThread(function()
 --	while QBCore == nil do
 --      TriggerEvent("QBCore:GetObject", function(obj)QBCore = obj end)
 --	end
@@ -71,10 +71,7 @@ exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
 			icon =  "fas fa-gas-pump",
 			label = "Refuel Petrol Can",
             canInteract = function(entity)
-                local gasCanDurability = GetCurrentGasCanDurability()
-                if gasCanDurability == nil then return false end
-                if gasCanDurability >= 100 then return false end
-                return true
+                return CanPumpRefuelPetrolCan()
             end
 		}
     },
@@ -82,8 +79,7 @@ exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
 })
 
 --Fuel siphon event
-RegisterNetEvent("cc-fuel:client:siphonfuel")
-AddEventHandler("cc-fuel:client:siphonfuel",function() 
+RegisterNetEvent("cc-fuel:client:siphonfuel",function() 
     local petrolCanDurability = GetCurrentGasCanDurability()
 
     local PlayerPed = PlayerPedId()
@@ -115,17 +111,17 @@ AddEventHandler("cc-fuel:client:siphonfuel",function()
     if currentFuel > 0 then
         --Start taking the fuel
         TaskTurnPedToFaceEntity(PlayerPed, Vehicle, 1000)
-	    Citizen.Wait(1000)
+	    Wait(1000)
 	
 	    LoadAnimDict("timetable@gardener@filling_can")
 	    TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
 
         isFueling = true
 
-        Citizen.CreateThread(function() 
+        CreateThread(function() 
             local fuelToTake = Config.SiphonRate
             while isFueling do
-                Citizen.Wait(500)
+                Wait(500)
 
 		        currentFuel = (currentFuel - fuelToTake)
                 petrolCanDurability = (petrolCanDurability + fuelToTake )
@@ -160,7 +156,7 @@ AddEventHandler("cc-fuel:client:siphonfuel",function()
                 isFueling = false
             end
 
-            Citizen.Wait(0)
+            Wait(0)
         end
 
         ClearPedTasks(PlayerPed)
@@ -173,8 +169,7 @@ AddEventHandler("cc-fuel:client:siphonfuel",function()
 end)
 
 --Action events
-RegisterNetEvent("cc-fuel:client:refillpetrolcan")
-AddEventHandler("cc-fuel:client:refillpetrolcan", function()
+RegisterNetEvent("cc-fuel:client:refillpetrolcan", function()
     local petrolCanDurability = GetCurrentGasCanDurability()
     if petrolCanDurability ~= nil then
         if petrolCanDurability == 100 then
@@ -197,8 +192,7 @@ AddEventHandler("cc-fuel:client:refillpetrolcan", function()
     end
 end)
 
-RegisterNetEvent("cc-fuel:client:buypetrolcan")
-AddEventHandler("cc-fuel:client:buypetrolcan", function()
+RegisterNetEvent("cc-fuel:client:buypetrolcan", function()
     local currentCash = QBCore.Functions.GetPlayerData().money['cash']
     if currentCash >= Config.JerryCanCost then
 		TriggerServerEvent('QBCore:Server:AddItem', "weapon_petrolcan", 1)
@@ -210,8 +204,7 @@ AddEventHandler("cc-fuel:client:buypetrolcan", function()
 	end
 end)
 
-RegisterNetEvent("cc-fuel:client:pumprefuel")
-AddEventHandler("cc-fuel:client:pumprefuel", function(pump) 
+RegisterNetEvent("cc-fuel:client:pumprefuel", function(pump) 
     local PlayerPed = PlayerPedId()
     local Vehicle = QBCore.Functions.GetClosestVehicle()
 
@@ -235,7 +228,7 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
     if CanFuelVehicle(Vehicle) then
         --Start the fueling
         TaskTurnPedToFaceEntity(PlayerPed, Vehicle, 1000)
-	    Citizen.Wait(1000)
+	    Wait(1000)
 	
 	    LoadAnimDict("timetable@gardener@filling_can")
 	    TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
@@ -254,10 +247,10 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
         local currentFuel = GetVehicleFuelLevel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
-        Citizen.CreateThread(function() 
+        CreateThread(function() 
             local fuelToAdd = Config.PetrolPumpRefuelRate
             while isFueling do
-                Citizen.Wait(500)
+                Wait(500)
 		        
 		        local extraCost = fuelToAdd / 1.5 * Config.CostMultiplier
                 
@@ -296,7 +289,7 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
                 isFueling = false
             end
 
-            Citizen.Wait(0)
+            Wait(0)
         end
 
         ClearPedTasks(PlayerPed)
@@ -309,8 +302,7 @@ AddEventHandler("cc-fuel:client:pumprefuel", function(pump)
 
 end)
 
-RegisterNetEvent("cc-fuel:client:petrolcanrefuel")
-AddEventHandler("cc-fuel:client:petrolcanrefuel", function() 
+RegisterNetEvent("cc-fuel:client:petrolcanrefuel", function() 
     local PlayerPed = PlayerPedId()
     local Vehicle = QBCore.Functions.GetClosestVehicle()
 
@@ -340,7 +332,7 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
     if CanFuelVehicle(Vehicle) then
         --Start the fueling
         TaskTurnPedToFaceEntity(PlayerPed, Vehicle, 1000)
-	    Citizen.Wait(1000)
+	    Wait(1000)
 	
 	    LoadAnimDict("timetable@gardener@filling_can")
 	    TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
@@ -358,10 +350,10 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
         local currentFuel = GetVehicleFuelLevel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
-        Citizen.CreateThread(function()
+        CreateThread(function()
             local fuelToAdd = Config.PetrolCanRefuelRate 
             while isFueling do
-                Citizen.Wait(500)
+                Wait(500)
 		        
                 currentFuel = currentFuel + fuelToAdd
                 petrolCanDurability = (petrolCanDurability - fuelToAdd)
@@ -396,7 +388,7 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
                 isFueling = false
             end
 
-            Citizen.Wait(10)
+            Wait(10)
         end
 
         ClearPedTasks(PlayerPed)
@@ -408,7 +400,7 @@ AddEventHandler("cc-fuel:client:petrolcanrefuel", function()
 end)
 
 --Update fuel thread
-Citizen.CreateThread(function()
+CreateThread(function()
     for index = 1, #Config.Blacklist do
 		if type(Config.Blacklist[index]) == 'string' then
 			Config.Blacklist[GetHashKey(Config.Blacklist[index])] = true
@@ -425,7 +417,7 @@ Citizen.CreateThread(function()
 
     local inBlacklisted = false
 	while true do
-		Citizen.Wait(1000)
+		Wait(1000)
 
 		local ped = PlayerPedId()
 
