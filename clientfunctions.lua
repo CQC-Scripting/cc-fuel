@@ -9,6 +9,13 @@ AddEventHandler('weapons:client:SetCurrentWeapon', function(data, bool)
     end
 end)
 
+function CanPumpRefuelPetrolCan()
+	local petrolCan = GetCurrentGasCanDurability()
+	if petrolCan == nil then return false end
+	if petrolCan >= 100 then return false end
+	return true
+end
+
 --Checks if the supplied vehicle can have fuel siphoned from it
 function IsSiphonFuelAllowed(vehicle)
 	if GetVehicleEngineHealth(entity) <= 0 then return false end
