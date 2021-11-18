@@ -25,6 +25,40 @@ Config.Blacklist = {
 -- Do you want the HUD removed from showing in blacklisted vehicles?
 Config.RemoveHUDForBlacklistedVehicle = true
 
+-- Fuel Station Blips
+Config.Blips = true -- set false to disable blips
+Config.BlipSpirte = 361
+Config.BlipColor = 26
+Config.BlipSize = 0.6
+Config.BlipLabel = "Fuel Station"
+Config.FuelStations = { --Add any additional, missing or custom fuel stations here
+	vector3(621.05, 269.09, 102.93),
+	vector3(1181.1, -330.58, 69.51),
+	vector3(819.14, -1028.9, 26.44),
+	vector3(1208.29, -1401.87, 35.23),
+	vector3(174.3, -1561.75, 28.39),
+	vector3(264.3, -1261.57, 29.77),
+	vector3(-70.15, -1762.1, 29.56),
+	vector3(-524.17, -1210.58, 18.68),
+	vector3(-724.05, -935.7, 19.72),
+	vector3(-1436.29, -276.87, 46.09),
+	vector3(-2097.08, -318.81, 13.98),
+	vector3(-1799.9, 802.85, 138.88),
+	vector3(2580.94, 361.59, 108.4),
+	vector3(1207.64, 2660.44, 37.82),
+	vector3(1040.36, 2671.2, 39.71),
+	vector3(263.88, 2606.94, 45.01),
+	vector3(2005.46, 3774.62, 31.98),
+	vector3(1785.16, 3331.04, 41.38),
+	vector3(2679.52, 3264.05, 55.14),
+	vector3(1687.49, 4929.92, 42.42),
+	vector3(1702.49, 6416.16, 32.82),
+	vector3(180.2, 6602.7, 31.66),
+	vector3(-94.6, 6419.65, 31.58),
+	vector3(-2555.02, 2334.03, 32.92),
+	vector3(49.18, 2779.13, 58.1),
+}
+
 -- Class multipliers. If you want SUVs to use less fuel, you can change it to anything under 1.0, and vise versa.
 Config.Classes = {
 	[0] = 1.0, -- Compacts
