@@ -1,9 +1,10 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 game 'gta5'
+lua54 'yes'
 
-author 'Custard'
+author 'CQC Development'
 description 'Fueling system utilising qb-target'
-version '1.0'
+version '1.1'
 
 shared_scripts { 
 	'config.lua'
@@ -19,8 +20,7 @@ server_scripts {
 }
 
 dependencies {
-	'qb-core',
-	'qb-target'
+	'qb-core'
 }
 
 exports {
@@ -28,4 +28,5 @@ exports {
 	'SetFuel',
 	'IsSiphonFuelAllowed',
 	'IsPetrolCanRefuelAllowed',
+	'CanPumpRefuelPetrolCan',
 }
