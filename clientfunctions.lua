@@ -65,13 +65,14 @@ end
 
 function GetFuel(vehicle)
 	if vehicle == 0 or vehicle == nil then return 0 end
-	return GetVehicleFuelLevel(vehicle)
+	return DecorGetFloat(vehicle, Config.FuelDecor)
 end
 
 function SetFuel(vehicle, fuel)
 	if vehicle == 0 or vehicle == nil then return end
 	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
 		SetVehicleFuelLevel(vehicle, fuel + 0.0)
+		DecorSetFloat(vehicle, Config.FuelDecor, fuel + 0.0)
 	end
 end
 
