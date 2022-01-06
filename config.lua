@@ -1,5 +1,8 @@
 Config = {}
 
+--Decor in which vehicle fuel is stored in, do not touch if you don't know what your doing!
+Config.FuelDecor = "_Fuel_Level"
+
 -- What should the price of jerry cans be?
 Config.JerryCanCost = 100
 
