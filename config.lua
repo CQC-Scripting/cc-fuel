@@ -134,3 +134,15 @@ Config.AllowFuelSiphoning = true
 --Allows people to refuel their cars with a petrol can that has fuel in it
 Config.AllowPetrolCanRefuelCar = true
 
+--The bones that can be targeted to attempt to siphon fuel from the vehicle
+Config.SiphonBones = {
+	'petrolcap',
+	'boot',
+	'wheel_r',
+}
+
+Config.PetrolCanRefuelBones = {
+	'petrolcap',
+	'boot',
+	'wheel_r',
+}

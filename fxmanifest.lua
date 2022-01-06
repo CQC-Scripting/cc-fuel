@@ -11,7 +11,8 @@ shared_scripts {
 }
 
 client_scripts {
-	'clientfunctions.lua',
+	'client_functions.lua',
+	'client_interactions.lua',
 	'client.lua'
 }
 
