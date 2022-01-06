@@ -406,6 +406,7 @@ end)
 
 --Update fuel thread
 CreateThread(function()
+    DecorRegister(Config.FuelDecor, 1)
     for index = 1, #Config.Blacklist do
 		if type(Config.Blacklist[index]) == 'string' then
 			Config.Blacklist[GetHashKey(Config.Blacklist[index])] = true
@@ -434,14 +435,18 @@ CreateThread(function()
 			else
 				inBlacklisted = false
 			end
+            
+            
 
 			if not inBlacklisted and GetPedInVehicleSeat(vehicle, -1) == ped then
-				if not fuelSynced then
+				if not DecorExistOn(vehicle, Config.FuelDecor) then
+                    SetFuel(vehicle,math.random(200, 800) / 10)
+                elseif IsVehicleEngineOn(vehicle) then
+                    SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
+                elseif not fuelSynced then
+                    print("Syncing fuel " .. GetFuel(vehicle))
                     SetFuel(vehicle, GetFuel(vehicle))
                     fuelSynced = true
-                end
-                if IsVehicleEngineOn(vehicle) then
-                    SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
                 end
 			end
 		else
