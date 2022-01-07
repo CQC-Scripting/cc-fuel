@@ -2,86 +2,7 @@
 QBCore = exports['qb-core']:GetCoreObject()
 
 isFueling = false
-CreateThread(function()
-    exports['qb-target']:AddGlobalVehicle({
-        options = {
-        { 
-            type = "client",
-            event = 'cc-fuel:client:petrolcanrefuel',
-            label = 'Refuel Car', 
-            icon = 'fas fa-gas-pump',
-            item = 'weapon_petrolcan',
-            canInteract = function(entity)
-                if GetVehicleEngineHealth(entity) <= 0 then return false end
-                if isFueling == false then
-                    local curGasCanDurability = GetCurrentGasCanDurability()
-                    if curGasCanDurability == nil then return false end
-                    if curGasCanDurability > 0 then return true end
-                    return false
-                end
-                return false
-            end
-        },
-        {
-            type="client",
-            event="cc-fuel:client:siphonfuel",
-            label = "Siphon Fuel",
-            icon = 'fas fa-gas-pump',
-            item = 'fuelsiphon',
-            canInteract = function(entity)
-                if GetVehicleEngineHealth(entity) <= 0 then return false end
-                if isFueling then return false end
-                local curGasCanDurability = GetCurrentGasCanDurability()
-                if curGasCanDurability == nil then return false end
-                if curGasCanDurability >= 100 then return false end
-                
-                return Config.AllowFuelSiphoning
-            end
-        }
-        },
-        distance = 2.5,
-    })
-    exports['qb-target']:AddTargetModel(Config.GasPumpModels, {
-        options = {
-            {
-                icon = "fas fa-gas-pump",
-                label = "Get Fuel",
-                action = function(entity)
-                    TriggerEvent("cc-fuel:client:pumprefuel", entity)
-                end
-            },
-            {
-                type = "client",
-                event = "cc-fuel:client:buypetrolcan",
-                icon =  "fas fa-gas-pump",
-                label = "Buy Petrol Can"
-            },
-            {
-                type = "client",
-                event = "cc-fuel:client:refillpetrolcan",
-                icon =  "fas fa-gas-pump",
-                label = "Refuel Petrol Can",
-                canInteract = function(entity)
-                    return CanPumpRefuelPetrolCan()
-                end
-            }
-        },
-        distance = 3.0
-    })
-    if Config.Blips then
-        for k, v in pairs(Config.FuelStations) do
-            FuelStationBlip = AddBlipForCoord(v.x, v.y, v.z)
-            SetBlipSprite(FuelStationBlip, Config.BlipSpirte)
-            SetBlipDisplay(FuelStationBlip, 2)
-            SetBlipScale(FuelStationBlip, Config.BlipSize)
-            SetBlipAsShortRange(FuelStationBlip, true)
-            SetBlipColour(FuelStationBlip, Config.BlipColor)
-            BeginTextCommandSetBlipName("STRING")
-            AddTextComponentSubstringPlayerName(Config.BlipLabel)
-            EndTextCommandSetBlipName(FuelStationBlip)
-        end
-    end
-end)
+
 
 --Fuel siphon event
 RegisterNetEvent("cc-fuel:client:siphonfuel",function() 
@@ -143,7 +64,7 @@ RegisterNetEvent("cc-fuel:client:siphonfuel",function()
                 end
             end
 
-            TriggerEvent("weapons:client:SetWeaponQuality",petrolCanDurability)
+            SetPetrolCanDurability(petrolCanDurability)
         end)
 
         while isFueling do
@@ -185,7 +106,7 @@ RegisterNetEvent("cc-fuel:client:refillpetrolcan", function()
                 local currentCash = QBCore.Functions.GetPlayerData().money['cash']  
 			    if currentCash >= refillCost then
 					TriggerServerEvent('cc-fuel:server:pay', refillCost, GetPlayerServerId(PlayerId()))
-					TriggerEvent("weapons:client:SetWeaponQuality",100)
+					SetPetrolCanDurability(100)
 				    QBCore.Functions.Notify("You refilled your petrol can","success")
                 else
                     QBCore.Functions.Notify("Not enough cash to refill the can","error")
@@ -375,7 +296,7 @@ RegisterNetEvent("cc-fuel:client:petrolcanrefuel", function()
                 end
             end
 
-            TriggerEvent("weapons:client:SetWeaponQuality",petrolCanDurability)
+            SetPetrolCanDurability(petrolCanDurability)
         end)
 
         while isFueling do
@@ -406,6 +327,7 @@ end)
 
 --Update fuel thread
 CreateThread(function()
+    DecorRegister(Config.FuelDecor, 1)
     for index = 1, #Config.Blacklist do
 		if type(Config.Blacklist[index]) == 'string' then
 			Config.Blacklist[GetHashKey(Config.Blacklist[index])] = true
@@ -434,14 +356,18 @@ CreateThread(function()
 			else
 				inBlacklisted = false
 			end
+            
+            
 
 			if not inBlacklisted and GetPedInVehicleSeat(vehicle, -1) == ped then
-				if not fuelSynced then
+				if not DecorExistOn(vehicle, Config.FuelDecor) then
+                    SetFuel(vehicle,math.random(200, 800) / 10)
+                elseif IsVehicleEngineOn(vehicle) then
+                    SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
+                elseif not fuelSynced then
+                    print("Syncing fuel " .. GetFuel(vehicle))
                     SetFuel(vehicle, GetFuel(vehicle))
                     fuelSynced = true
-                end
-                if IsVehicleEngineOn(vehicle) then
-                    SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
                 end
 			end
 		else

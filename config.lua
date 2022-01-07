@@ -1,5 +1,8 @@
 Config = {}
 
+--Decor in which vehicle fuel is stored in, do not touch if you don't know what your doing!
+Config.FuelDecor = "_Fuel_Level"
+
 -- What should the price of jerry cans be?
 Config.JerryCanCost = 100
 
@@ -131,3 +134,15 @@ Config.AllowFuelSiphoning = true
 --Allows people to refuel their cars with a petrol can that has fuel in it
 Config.AllowPetrolCanRefuelCar = true
 
+--The bones that can be targeted to attempt to siphon fuel from the vehicle
+Config.SiphonBones = {
+	'petrolcap',
+	'boot',
+	'wheel_r',
+}
+
+Config.PetrolCanRefuelBones = {
+	'petrolcap',
+	'boot',
+	'wheel_r',
+}
