@@ -39,17 +39,19 @@ function GetCurrentGasCanDurability()
 	print("Percentage Full")
 	print(percentageFull)
 	if weapon then
-		if hash == `weapon_petrolcan` then
-			if ammo > 4000 then 
-				ammo = 4000
-				SetPedAmmo(PlayerPedId(), `weapon_petrolcan`, ammo)
-				ammo = GetAmmoInPedWeapon(PlayerPedId(), `weapon_petrolcan`)
-			end
+		return percentageFull
+		-- if hash == `weapon_petrolcan` then
+		-- 	-- if ammo > 4000 then
+		-- 	-- 	print("Ammo over 4000") 
+		-- 	-- 	ammo = 4000
+		-- 	-- 	SetPedAmmo(PlayerPedId(), `weapon_petrolcan`, ammo)
+		-- 	-- 	ammo = GetAmmoInPedWeapon(PlayerPedId(), `weapon_petrolcan`)
+		-- 	-- end
 			
-			return percentageFull
-		else
-			return nil
-		end
+		-- 	return percentageFull
+		-- else
+		-- 	return nil
+		-- end
 	else
 		return nil
 	end
@@ -57,18 +59,22 @@ end
 
 --Sets the ammo contained the petrol can
 function SetPetrolCanDurability(percentageFull)
+	if percentageFull > 100 then percentageFull = 100 end
+	if percentageFull < 0 then percentageFull = 0 end
+
 	local ammo = (4000 / 100) * percentageFull
-	print("Setting ammo")
-	print(ammo)
 	if ammo > 4000 then ammo = 100 end
 	if ammo < 0 then ammo = 0 end
+	print("Setting petrol can ammo " .. ammo)
+	print(percentageFull)
 	SetPedAmmo(PlayerPedId(),`weapon_petrolcan`,ammo)
+	TriggerServerEvent("weapons:server:UpdateWeaponAmmo",CurrentWeaponData,ammo)
 end
 
 --Returns true if the vehicle passed in is able to be fueled
 function CanFuelVehicle(Vehicle)
     if Vehicle then
-        local fuelLevel = GetVehicleFuelLevel(Vehicle)
+        local fuelLevel = GetFuel(Vehicle)
         
         if fuelLevel == 100 then
             return false
@@ -80,14 +86,18 @@ end
 
 function GetFuel(vehicle)
 	if vehicle == 0 or vehicle == nil then return 0 end
+	print("Getting Fuel")
+	print(DecorGetFloat(vehicle, Config.FuelDecor))
 	return DecorGetFloat(vehicle, Config.FuelDecor)
 end
 
 function SetFuel(vehicle, fuel)
-	if vehicle == 0 or vehicle == nil then return end
+	if vehicle == 0 or vehicle == nil then print("nil vehicle") return end
 	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
-		SetVehicleFuelLevel(vehicle, fuel + 0.0)
-		DecorSetFloat(vehicle, Config.FuelDecor, fuel + 0.0)
+		print("Setting fuel")
+		print(fuel)
+		SetVehicleFuelLevel(vehicle, fuel)
+		DecorSetFloat(vehicle, Config.FuelDecor, fuel)
 	end
 end
 

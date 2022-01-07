@@ -1,8 +1,21 @@
 --New QBCore way of getting the Object comment out if your using old QB
 QBCore = exports['qb-core']:GetCoreObject()
-
 isFueling = false
+CurrentWeaponData = nil
 
+--Pulls Current Weapon data from qb-weapons event calls
+AddEventHandler("weapons:client:SetCurrentWeapon",function(weaponData,canShoot) 
+    CurrentWeaponData = weaponData
+    TriggerEvent('table',weaponData)
+end)
+
+function CheckDecor(vehicle)
+    if not vehicle then return end
+    if not DecorExistOn(vehicle,Config.FuelDecor) then
+        print("Decor didnt exist")
+        DecorSetFloat(vehicle, Config.FuelDecor, GetFuel(vehicle))
+    end
+end
 
 --Fuel siphon event
 RegisterNetEvent("cc-fuel:client:siphonfuel",function() 
@@ -32,7 +45,7 @@ RegisterNetEvent("cc-fuel:client:siphonfuel",function()
         QBCore.Functions.Notify("You petrol can is full","error")
         return
     end
-    local currentFuel = GetVehicleFuelLevel(Vehicle)
+    local currentFuel = GetFuel(Vehicle)
     --Check car is able to have fuel taken
     if currentFuel > 0 then
         --Start taking the fuel
@@ -43,28 +56,30 @@ RegisterNetEvent("cc-fuel:client:siphonfuel",function()
 	    TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
 
         isFueling = true
-
+        CheckDecor(Vehicle)
         CreateThread(function() 
             local fuelToTake = Config.SiphonRate
             while isFueling do
                 Wait(500)
 
 		        currentFuel = (currentFuel - fuelToTake)
-                petrolCanDurability = (petrolCanDurability + fuelToTake )
+                petrolCanDurability = (petrolCanDurability + fuelToTake)
 
                 if currentFuel <= 0 then
                     currentFuel = 0
                     isFueling = false
                 end
 
-                SetFuel(Vehicle, currentFuel)
+                --SetFuel(Vehicle, currentFuel)
                 
                 if petrolCanDurability >= 100 then
                     isFueling = false
                 end
-            end
 
-            SetPetrolCanDurability(petrolCanDurability)
+                SetPetrolCanDurability(petrolCanDurability)
+            end
+            print(petrolCanDurability)
+            SetFuel(Vehicle,GetFuel(Vehicle))
         end)
 
         while isFueling do
@@ -170,9 +185,10 @@ RegisterNetEvent("cc-fuel:client:pumprefuel", function(pump)
 
         isFueling = true
         local currentCost = 0
-        local currentFuel = GetVehicleFuelLevel(Vehicle)
+        local currentFuel = GetFuel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
+        CheckDecor(Vehicle)
         CreateThread(function() 
             local fuelToAdd = Config.PetrolPumpRefuelRate
             while isFueling do
@@ -195,6 +211,7 @@ RegisterNetEvent("cc-fuel:client:pumprefuel", function(pump)
                     isFueling = false
                 end
             end
+            SetFuel(Vehicle,GetFuel(Vehicle))
         end)
 
         while isFueling do
@@ -273,9 +290,10 @@ RegisterNetEvent("cc-fuel:client:petrolcanrefuel", function()
         end
 
         isFueling = true
-        local currentFuel = GetVehicleFuelLevel(Vehicle)
+        local currentFuel = GetFuel(Vehicle)
         local currentCash = QBCore.Functions.GetPlayerData().money['cash']
 
+        CheckDecor(Vehicle)
         CreateThread(function()
             local fuelToAdd = Config.PetrolCanRefuelRate 
             while isFueling do
@@ -297,6 +315,7 @@ RegisterNetEvent("cc-fuel:client:petrolcanrefuel", function()
             end
 
             SetPetrolCanDurability(petrolCanDurability)
+            SetFuel(Vehicle,GetFuel(Vehicle))
         end)
 
         while isFueling do
@@ -357,20 +376,22 @@ CreateThread(function()
 				inBlacklisted = false
 			end
             
-            
-
 			if not inBlacklisted and GetPedInVehicleSeat(vehicle, -1) == ped then
 				if not DecorExistOn(vehicle, Config.FuelDecor) then
                     SetFuel(vehicle,math.random(200, 800) / 10)
                 elseif IsVehicleEngineOn(vehicle) then
-                    SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
-                elseif not fuelSynced then
-                    print("Syncing fuel " .. GetFuel(vehicle))
-                    SetFuel(vehicle, GetFuel(vehicle))
+                    SetFuel(vehicle, GetFuel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
+                elseif not fuelSynced then   
                     fuelSynced = true
                 end
-			end
+                print("Syncing fuel " .. GetFuel(vehicle))
+                SetFuel(vehicle, GetFuel(vehicle))
+			else
+                SetFuel(vehicle,GetFuel(vehicle))
+            end
 		else
+            local closestVehicle = QBCore.Functions.GetClosestVehicle()
+            SetFuel(closestVehicle,GetFuel(closestVehicle))
 			if fuelSynced then
 				fuelSynced = false
 			end
