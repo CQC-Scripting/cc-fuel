@@ -390,8 +390,15 @@ CreateThread(function()
                 SetFuel(vehicle,GetFuel(vehicle))
             end
 		else
-            local closestVehicle = QBCore.Functions.GetClosestVehicle()
-            SetFuel(closestVehicle,GetFuel(closestVehicle))
+            local closestPlayer, distance = QBCore.Functions.GetClosestPlayer()
+            local playerPed = GetPlayerPed(closestPlayer)
+            print(playerPed)
+            print(GetVehiclePedIsIn(playerPed,false))
+            if GetVehiclePedIsIn(playerPed,false) then
+                local closestVehicle = GetVehiclePedIsIn(playerPed,false)
+                SetFuel(closestVehicle,GetFuel(closestVehicle))
+            end
+            
 			if fuelSynced then
 				fuelSynced = false
 			end
