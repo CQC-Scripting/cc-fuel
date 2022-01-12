@@ -6,13 +6,11 @@ CurrentWeaponData = nil
 --Pulls Current Weapon data from qb-weapons event calls
 AddEventHandler("weapons:client:SetCurrentWeapon",function(weaponData,canShoot) 
     CurrentWeaponData = weaponData
-    TriggerEvent('table',weaponData)
 end)
 
 function CheckDecor(vehicle)
     if not vehicle then return end
     if not DecorExistOn(vehicle,Config.FuelDecor) then
-        print("Decor didnt exist")
         DecorSetFloat(vehicle, Config.FuelDecor, GetFuel(vehicle))
     end
 end
@@ -384,7 +382,6 @@ CreateThread(function()
                 elseif not fuelSynced then   
                     fuelSynced = true
                 end
-                print("Syncing fuel " .. GetFuel(vehicle))
                 SetFuel(vehicle, GetFuel(vehicle))
 			else
                 SetFuel(vehicle,GetFuel(vehicle))
@@ -392,9 +389,7 @@ CreateThread(function()
 		else
             local closestPlayer, distance = QBCore.Functions.GetClosestPlayer()
             local playerPed = GetPlayerPed(closestPlayer)
-            print(playerPed)
-            print(GetVehiclePedIsIn(playerPed,false))
-            if GetVehiclePedIsIn(playerPed,false) then
+            if IsPedInAnyVehicle(playerPed) then
                 local closestVehicle = GetVehiclePedIsIn(playerPed,false)
                 SetFuel(closestVehicle,GetFuel(closestVehicle))
             end
